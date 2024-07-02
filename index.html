@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colaboración</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="TsukiLogo.png" id="logo1">
+
+    </div>
+    <div class="final-background" id="final-background" style="background-image: url('bg.jpeg');"></div>
+    <div class="input-container">
+        <div class="redeem-box">
+            <input type="text" id="redeem-code" placeholder="Code:">
+            <button id="redeem-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logo1 = document.getElementById('logo1');
+            const logo2 = document.getElementById('logo2');
+            const x = document.getElementById('x');
+            const finalBackground = document.getElementById('final-background');
+            const redeemButton = document.getElementById('redeem-button');
+
+            setTimeout(() => {
+                logo1.classList.add('active');
+                x.classList.add('active');
+                logo2.classList.add('active');
+            }, 1000);
+
+            setTimeout(() => {
+                logo1.classList.remove('active');
+                x.classList.remove('active');
+                logo2.classList.remove('active');
+            }, 4000);
+
+            setTimeout(() => {
+                finalBackground.classList.add('active');
+                document.querySelector('.input-container').classList.add('active');
+            }, 5000);
+
+            redeemButton.addEventListener('click', () => {
+                const code = document.getElementById('redeem-code').value;
+                if (code === '020724') {
+                    window.location.href = 'start.html';
+                } else {
+                    alert('Código incorrecto. Inténtelo de nuevo.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

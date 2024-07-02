@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('bg.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            perspective: 1000px;
+        }
+
+        .ipad {
+            position: relative;
+            width: 420px;
+            height: 700px;
+            background: linear-gradient(145deg, #d3a4f0, #e5c0ff); /* Color más claro para el iPad */
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            overflow: auto;
+            flex-direction: column;
+            transition: transform 0.1s ease-out;
+            border: 20px solid #8e44ad; /* Funda morada */
+        }
+
+        .ipad-header, .ipad-footer {
+            flex: 0 0 60px;
+            background: #e1e1e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ipad-header {
+            position: relative;
+        }
+
+        .camera {
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        .volume-buttons, .power-button {
+            position: absolute;
+            background: #fff; /* Botones blancos */
+            width: 10px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .volume-buttons {
+            top: 100px;
+            left: -15px;
+        }
+
+        .volume-buttons:before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 40px;
+            background: #fff; /* Botones blancos */
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .power-button {
+            top: 100px;
+            right: -15px;
+        }
+
+        .screen {
+            flex: 1;
+            background: url('phone.gif') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 20px;
+            position: relative;
+        }
+
+        .apps {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .app {
+            width: 80px;
+            height: 80px;
+            background: #e1e1e1;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .app img {
+            width: 100%; /* Ajustado para llenar el tamaño de la casilla */
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .app:hover {
+            background: #d1d1d1;
+            transform: scale(1.1);
+        }
+
+        .app-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow-y: auto;
+            padding: 20px;
+            animation: fadeInContent 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .photo-grid {
+            display: flow-root;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: visible;
+            padding: 20px;
+        }
+
+        .post {
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .post img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post .username {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .post .description {
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-size: 16px;
+            background: #fff;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-game {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: space-between;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            background: #e1e1e1;
+            border-radius: 10px;
+        }
+
+        .memory-card {
+            width: calc(25% - 10px);
+            height: calc(25% - 10px);
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-card img {
+            width: 50%;
+            height: 50%;
+            visibility: hidden;
+        }
+
+        .memory-card.flipped img {
+            visibility: visible;
+        }
+
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .ipad-footer .home-button {
+            position: absolute;
+            bottom: 10px; /* Ajustado para mantenerse en el lugar correcto */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: #fff; /* Botón blanco */
+            border-radius: 50%;
+            border: 3px solid #d3a4f0; /* Contorno del botón */
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 10; /* Para asegurarse de que esté siempre encima */
+        }
+
+        .ipad-footer .home-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ipad" id="ipad">
+            <div class="ipad-header">
+                <div class="camera"></div>
+            </div>
+            <div class="volume-buttons"></div>
+            <div class="power-button"></div>
+            <div class="screen">
+                <div class="apps" id="app-icons">
+                    <div class="app" id="photos-app">
+                        <img src="photo.png" alt="Fotos">
+                    </div>
+                    <div class="app" id="notes-app">
+                        <img src="notes.jpeg" alt="Notas">
+                    </div>
+                    <div class="app" id="game-app">
+                        <img src="game_icon.png" alt="Juego">
+                    </div>
+                </div>
+                <div class="app-content" id="photos-content">
+                    <div class="photo-grid">
+                        <div class="post">
+                            <img src="1.jpg" alt="Foto 1">
+                            <div class="username">Fabricio :D</div>
+                            <div class="description">Mi novia y yo tuvimos un hijo (aguacatin)🥑🥑</div>
+                        </div>
+                        <div class="post">
+                            <img src="2.jpg" alt="Foto 2">
+                            <div class="username">Fabricio Graduated version</div>
+                            <div class="description">Tenemos las togas :D nada más falta el título🎉🎉🎉</div>
+                        </div>
+                        <div class="post">
+                            <img src="3.jpg" alt="Foto 3">
+                            <div class="username">Aventurero Fabricio </div>
+                            <div class="description">Una competencia de sonrisas (yo gané)</div>
+                        </div>
+                        <div class="post">
+                            <img src="4.png" alt="Foto 3">
+                            <div class="username">Fabricio the builder</div>
+                            <div class="description">Hice a mi novia en lego, 12 dolares!!! 😥</div>
+                        </div>
+                        <div class="post">
+                            <img src="5.jpg" alt="Foto 3">
+                            <div class="username">W fabricio </div>
+                            <div class="description">W, nada más que decir. 🥶</div>
+                        </div>
+                        <div class="post">
+                            <img src="6.jpg" alt="Foto 3">
+                            <div class="username">Fabricio obsceno</div>
+                            <div class="description">En el pasto de las obscenidades, me despeine un poquito pero mi novia nunca deja de verse hermosa.😻😻😻</div>
+                        </div>
+                        <div class="post">
+                            <img src="7.jpg" alt="Foto 3">
+                            <div class="username">Fabricio Fino</div>
+                            <div class="description">Un poco +18 pero siendo feliz con la mujer más hermosa e inteligente en el mundo, la amo.❤️❤️❤️</div>
+                        </div>
+                        <!-- Añade más posts aquí -->
+                    </div>
+                </div>
+                <div class="app-content" id="notes-content">
+                    <textarea readonly>Hola mi amor, te hice esta pagina web q queria que pareciera que era oficial de tsuki pero como q al final ya no me salió tan bien pero hice esto con mucho esfuerzo, no creas que es muy fácil simular un celular dentro de html osea de una pagina web y menos en codigo seco, voy a aprender una forma más eficiente de hacerte paginas porq ya vi que si existe, pero bueno mi amor gracias por ser mi novia como siempre y te amo cada vez mas soy muy feliz por cumplir 8 meses contigo y de vdd el tenerte me hace muy feliz, espero te haya gustado mi regalo y todo, hice lo posible para ser creativo y que saliera padre, pero casi no lo logre para que se viera igual, pero bueno ya me queje mucho de la pagina, que sepas mi amor que me haces los dias, que siempre q me escribes me hablas me siento contigo y que tu haces una gran diferencia en mi vida y quiero vivir siempre contigo y tenerte para mi siempre. Gracias mi amor te amo mucho y nos la vamos a pasar padre hoy :D    ah y ultima cosa, te quiero regalar el tsuki premium o como se llame, entonces dime si lo quieres o no, gracias :D</textarea>
+                </div>
+                <div class="app-content" id="game-content">
+                    <div class="memory-game">
+                        <div class="memory-card" data-framework="aurelia">
+                            <img src="1.jpg" alt="Aurelia">
+                        </div>
+                        <div class="memory-card" data-framework="aurelia">
+                            <img src="1.jpg" alt="Aurelia">
+                        </div>
+                        <div class="memory-card" data-framework="angular">
+                            <img src="2.jpg" alt="Angular">
+                        </div>
+                        <div class="memory-card" data-framework="angular">
+                            <img src="2.jpg" alt="Angular">
+                        </div>
+                        <div class="memory-card" data-framework="vue">
+                            <img src="3.jpg" alt="Vue">
+                        </div>
+                        <div class="memory-card" data-framework="vue">
+                            <img src="3.jpg" alt="Vue">
+                        </div>
+                        <div class="memory-card" data-framework="react">
+                            <img src="4.png" alt="React">
+                        </div>
+                        <div class="memory-card" data-framework="react">
+                            <img src="4.png" alt="React">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ipad-footer">
+                <div class="home-button" id="home-button"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ipad = document.getElementById('ipad');
+            const appIcons = document.getElementById('app-icons');
+            const photosApp = document.getElementById('photos-app');
+            const notesApp = document.getElementById('notes-app');
+            const gameApp = document.getElementById('game-app');
+            const homeButton = document.getElementById('home-button');
+            const photosContent = document.getElementById('photos-content');
+            const notesContent = document.getElementById('notes-content');
+            const gameContent = document.getElementById('game-content');
+
+            photosApp.addEventListener('click', () => {
+                appIcons.style.display = 'none';
+                photosContent.style.display = 'block';
+            });
+
+            notesApp.addEventListener('click', () => {
+                appIcons.style.display = 'none';
+                notesContent.style.display = 'block';
+            });
+
+            gameApp.addEventListener('click', () => {
+                appIcons.style.display = 'none';
+                gameContent.style.display = 'block';
+            });
+
+            homeButton.addEventListener('click', () => {
+                appIcons.style.display = 'flex';
+                photosContent.style.display = 'none';
+                notesContent.style.display = 'none';
+                gameContent.style.display = 'none';
+            });
+
+            // Rotación del iPad con el movimiento del mouse
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth / 2 - e.pageX) / 50;
+                const y = (window.innerHeight / 2 - e.pageY) / 50;
+                ipad.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
+            });
+
+            // Juego de memoria
+            const cards = document.querySelectorAll('.memory-card');
+            let hasFlippedCard = false;
+            let lockBoard = false;
+            let firstCard, secondCard;
+
+            function flipCard() {
+                if (lockBoard) return;
+                if (this === firstCard) return;
+
+                this.classList.add('flipped');
+
+                if (!hasFlippedCard) {
+                    hasFlippedCard = true;
+                    firstCard = this;
+                    return;
+                }
+
+                secondCard = this;
+                checkForMatch();
+            }
+
+            function checkForMatch() {
+                let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+
+                isMatch ? disableCards() : unflipCards();
+            }
+
+            function disableCards() {
+                firstCard.removeEventListener('click', flipCard);
+                secondCard.removeEventListener('click', flipCard);
+
+                resetBoard();
+            }
+
+            function unflipCards() {
+                lockBoard = true;
+
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+
+                    resetBoard();
+                }, 1500);
+            }
+
+            function resetBoard() {
+                [hasFlippedCard, lockBoard] = [false, false];
+                [firstCard, secondCard] = [null, null];
+            }
+
+            (function shuffle() {
+                cards.forEach(card => {
+                    let randomPos = Math.floor(Math.random() * 12);
+                    card.style.order = randomPos;
+                });
+            })();
+
+            cards.forEach(card => card.addEventListener('click', flipCard));
+        });
+    </script>
+</body>
+</html>
